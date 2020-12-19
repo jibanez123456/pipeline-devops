@@ -15,12 +15,14 @@ def call(){
 					params.tool
 
 					if (params.tool == 'gradle') { 
-							def ejecucion = load 'gradle.groovy'
-							ejecucion.call()
+							//def ejecucion = load 'gradle.groovy'
+							//ejecucion.call()
+							gradle.call()
 					}
 					else {
-							def ejecucion = load 'maven.groovy'
-							ejecucion.call()
+							//def ejecucion = load 'maven.groovy'
+							//ejecucion.call()
+							maven.call()
 					}
 				}
             }
