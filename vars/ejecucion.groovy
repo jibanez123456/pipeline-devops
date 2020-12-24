@@ -16,7 +16,8 @@ def call(){
                 script {
 
                 	env.ETAPA = ''
-
+                	env.PARAM_STAGE = params.stage
+                	
                 	if (params.stage.isEmpty()) {
 						// ejecutar todos los steps
 						println "INFO: Ejecución de TODOS los stages"
