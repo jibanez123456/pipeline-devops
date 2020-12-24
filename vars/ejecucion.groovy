@@ -3,7 +3,11 @@ def call(){
 	pipeline {
     agent any
 
-	parameters { choice(name: 'tool', choices: ['gradle', 'maven'], description: 'Selección herramienta de Construcción') }
+	parameters { 
+		choice(name: 'tool', choices: ['gradle', 'maven'], description: 'Selección herramienta de Construcción:')
+		string(name: 'stage' defaultValue: '', description: 'Ingrese parametro->stage a ejecutar:')
+	}
+
     
     stages {
         stage('Pipeline') {
@@ -11,18 +15,25 @@ def call(){
                 script {
 
                 	env.ETAPA = ''
-				
-					params.tool
 
-					if (params.tool == 'gradle') { 
-							//def ejecucion = load 'gradle.groovy'
-							//ejecucion.call()
-							gradle.call()
+                	if (params.stage.isEmpty()) {
+						// ejecutar todos los steps
+						params.tool
+
+						if (params.tool == 'gradle') { 
+								//def ejecucion = load 'gradle.groovy'
+								//ejecucion.call()
+								gradle.call()
+						}
+						else {
+								//def ejecucion = load 'maven.groovy'
+								//ejecucion.call()
+								maven.call()
+						}
 					}
 					else {
-							//def ejecucion = load 'maven.groovy'
-							//ejecucion.call()
-							maven.call()
+						// ejecutar el o los stages ingresados
+						println "debug: Ejecución de uno o mas stages"
 					}
 				}
             }
