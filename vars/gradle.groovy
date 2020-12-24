@@ -13,7 +13,8 @@ def call(){
 			sh 'gradle clean build'
 		}
 		else {
-			sh 'gradle clean build'
+			// sh 'gradle clean build'
+			println "no ejecutar stage Build-Test"
 		}
 	}
 	stage('Sonar') {

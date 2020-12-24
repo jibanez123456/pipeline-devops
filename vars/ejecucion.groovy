@@ -8,6 +8,7 @@ def call(){
 		string(name: 'stage', defaultValue: '', description: 'Ingrese parametro->stage a ejecutar:')
 	}
 
+	// agregar la validación del parametro stage: vacio, un stage o todos los stages
     
     stages {
         stage('Pipeline') {
