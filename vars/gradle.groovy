@@ -6,10 +6,15 @@
 
 def call(){
   
-	stage('Build and Test') {
+	stage('Build-Test') {
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
-		sh 'gradle clean build'
+		if (env.PARAM_STAGE == 'Build-Test') {
+			sh 'gradle clean build'
+		}
+		else {
+			sh 'gradle clean build'
+		}
 	}
 	stage('Sonar') {
 		// configurado en sonarcube-configuration
