@@ -5,7 +5,7 @@ def call(){
 
 	parameters { 
 		choice(name: 'tool', choices: ['gradle', 'maven'], description: 'Selección herramienta de Construcción:')
-		string(name: 'stage' defaultValue: '', description: 'Ingrese parametro->stage a ejecutar:')
+		string(name: 'stage', defaultValue: '', description: 'Ingrese parametro->stage a ejecutar:')
 	}
 
     
