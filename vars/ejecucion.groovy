@@ -18,6 +18,8 @@ def call(){
 
                 	if (params.stage.isEmpty()) {
 						// ejecutar todos los steps
+						println "info: Ejecución de TODOS los stages"
+
 						params.tool
 
 						if (params.tool == 'gradle') { 
@@ -33,7 +35,7 @@ def call(){
 					}
 					else {
 						// ejecutar el o los stages ingresados
-						println "debug: Ejecución de uno o mas stages"
+						println "info: Ejecución de uno o mas stages"
 					}
 				}
             }
