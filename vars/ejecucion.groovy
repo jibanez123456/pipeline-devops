@@ -12,9 +12,11 @@ def call(){
     
     stages {
     	stage('Validacion') {
-
-
-
+            steps {
+                script {
+						println "INFO: Validacion parametros"
+                }
+            }
     	}
         stage('Pipeline') {
             steps {
