@@ -21,7 +21,7 @@ def call(){
 						for( String values : params_stage_list )
       						println(values);
 
-      					if (params_stage_list.length()) >= 1 {
+      					if (params_stage_list.length() >= 1) {
 							println "INFO: Cantidad de Etapas -> OK!"		
       					}
       					else {
