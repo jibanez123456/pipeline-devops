@@ -14,20 +14,25 @@ def call(){
     	stage('Validacion') {
             steps {
                 script {
+                		env.ETAPA = 'Validacion'
 						println "INFO: Validacion parametros"
+						//caso Gradle 
 						if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
 							println "INFO: Parametro OK!"		
 						}
 						else {
 							error 'Parametros invalidos, ejecución interrumpida'
 						}
+
+						// caso Maven
+
+
                 }
             }
     	}
         stage('Pipeline') {
             steps {
                 script {
-
                 	env.ETAPA = ''
                 	env.PARAM_STAGE = params.stage
                 	
