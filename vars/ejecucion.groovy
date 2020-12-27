@@ -15,6 +15,12 @@ def call(){
             steps {
                 script {
 						println "INFO: Validacion parametros"
+						if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
+							println "INFO: Parametro OK!"		
+						}
+						else {
+							error 'Parametros invalidos, ejecución interrumpida'
+						}
                 }
             }
     	}
