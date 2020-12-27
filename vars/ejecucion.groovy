@@ -16,12 +16,24 @@ def call(){
                 script {
                 		env.ETAPA = 'Validacion'
 						println "INFO: Validacion parametros"
+
+						String[] params_stage_list = params.stage.split(';')
+						for( String values : params_stage_list )
+      						println(values);
+
+      					if (params_stage_list.length()) >= 1 {
+							println "INFO: Cantidad de Etapas -> OK!"		
+      					}
+      					else {
+							error 'Parametros invalidos, ejecución interrumpida: Cantidad de Steps'
+
+      					}
 						//caso Gradle 
 						if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
-							println "INFO: Parametro OK!"		
+							println "INFO: Etapas validas -> OK!"		
 						}
 						else {
-							error 'Parametros invalidos, ejecución interrumpida'
+							error 'Parametros invalidos, ejecución interrumpida: Steps no reconocidos'
 						}
 
 						// caso Maven
