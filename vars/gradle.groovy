@@ -20,29 +20,45 @@ def call(){
 	stage('Sonar') {
 		// configurado en sonarcube-configuration
 		env.ETAPA = env.STAGE_NAME
-		def scannerHome = tool 'sonar-scanner';
-		
-		// conf generales
-		withSonarQubeEnv('sonar-server') { 
-			//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-			bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+		if (env.PARAM_STAGE == 'Sonar') {
+			def scannerHome = tool 'sonar-scanner';
+			
+			// conf generales
+			withSonarQubeEnv('sonar-server') { 
+				//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+				bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+			}
+		}
+		else {
+			println "no ejecutar stage Sonar"
 		}
 	}
 	stage('Run') {
 		// bat "gradle bootRun &"
 		env.ETAPA = env.STAGE_NAME
-		sh 'gradle bootRun &'
-		sleep 20
+		if (env.PARAM_STAGE == 'Run') {
+			sh 'gradle bootRun &'
+			sleep 20
+		}
+		else {
+			println "no ejecutar stage Run"
+		}
 	}
 	stage('Test') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+		if (env.PARAM_STAGE == 'Run') {
+			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+		}
+		else {
+			println "no ejecutar stage Test"
+		}
 
 	}
 	stage('Nexus') {
 		//
 		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE == 'Nexus') {
 		   nexusPublisher nexusInstanceId: 'nexus', 
 		   nexusRepositoryId: 'test-repo',
 		   packages: [
@@ -58,12 +74,14 @@ def call(){
 					groupId: 'com.devopsusach2020', 
 					packaging: 'jar', 
 					version: '1.0.0'
+					]
 				]
 			]
-		]
-		
+		}
+		else {
+			println "no ejecutar stage Nexus"
+		}	
 	}
-
 }
 
 return this; 

@@ -11,6 +11,11 @@ def call(){
 	// agregar la validación del parametro stage: vacio, un stage o todos los stages
     
     stages {
+    	stage('Validacion') {
+
+
+
+    	}
         stage('Pipeline') {
             steps {
                 script {
