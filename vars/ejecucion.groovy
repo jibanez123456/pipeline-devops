@@ -32,30 +32,29 @@ def call(){
 								error 'Parametros invalidos, ejecución interrumpida: Cantidad de Steps'
 
 	      					}
-						}
 
-	
-      					if params.tool == 'gradle' {
-							//caso Gradle 
-							if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
-								println "INFO: Etapas validas -> OK!"		
-							}
-							else {
-								error 'Parametros invalidos: Gradle, ejecución interrumpida: Steps no reconocidos'
-							}
-      					}
-						else if (params.tool == 'maven') {
-							// caso Maven -> Compile;Test-Code;Build;Sonar;Run;Test-App;Nexus
-							if (params.stage.contains('Compile') || params.stage.contains('Test-Code') || params.stage.contains('Build') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test-App') || params.stage.contains('Nexus')) {
-								println "INFO: Etapas validas -> OK!"		
-							}
-							else {
-								error 'Parametros invalidos: Maven, ejecución interrumpida: Steps no reconocidos'
-							}      					
-      					}
-      					else {
-      						error "ERROR: parametro <Herramienta> incorrecto"
-      					}
+	      					if params.tool == 'gradle' {
+								//caso Gradle 
+								if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
+									println "INFO: Etapas validas -> OK!"		
+								}
+								else {
+									error 'Parametros invalidos: Gradle, ejecución interrumpida: Steps no reconocidos'
+								}
+      						}
+							else if (params.tool == 'maven') {
+								// caso Maven -> Compile;Test-Code;Build;Sonar;Run;Test-App;Nexus
+								if (params.stage.contains('Compile') || params.stage.contains('Test-Code') || params.stage.contains('Build') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test-App') || params.stage.contains('Nexus')) {
+									println "INFO: Etapas validas -> OK!"		
+								}
+								else {
+									error 'Parametros invalidos: Maven, ejecución interrumpida: Steps no reconocidos'
+								}      					
+	      					}
+	      					else {
+	      						error "ERROR: parametro <Herramienta> incorrecto"
+	      					}
+						}
                 }
             }
     	}
