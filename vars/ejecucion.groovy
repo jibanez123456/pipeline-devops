@@ -17,17 +17,24 @@ def call(){
                 		env.ETAPA = 'Validacion'
 						println "INFO: Validacion parametros"
 
-						String[] params_stage_list = params.stage.split(';')
-						for( String values : params_stage_list )
-      						println(values);
+						if (params.stage.isEmpty()) {
+								println "INFO: stage=vacio -> ejecutar TODOS"		
+						} 
+						else {
+							String[] params_stage_list = params.stage.split(';')
+							for( String values : params_stage_list )
+	      						println(values);
 
-      					if (params_stage_list.size() >= 1) {
-							println "INFO: Cantidad de Etapas -> OK!"		
-      					}
-      					else {
-							error 'Parametros invalidos, ejecución interrumpida: Cantidad de Steps'
+	      					if (params_stage_list.size() >= 1) {
+								println "INFO: Cantidad de Etapas -> OK!"		
+	      					}
+	      					else {
+								error 'Parametros invalidos, ejecución interrumpida: Cantidad de Steps'
 
-      					}
+	      					}
+						}
+
+	
       					if params.tool == 'gradle' {
 							//caso Gradle 
 							if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
