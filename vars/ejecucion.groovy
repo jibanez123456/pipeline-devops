@@ -8,10 +8,10 @@ def call(){
 		string(name: 'stage', defaultValue: '', description: 'Ingrese parametro->stage a ejecutar:')
 	}
 
-	// agregar la validación del parametro stage: vacio, un stage o todos los stages
+	
     
     stages {
-    	stage('Validacion') {
+    	stage('Validacion') { // validación del parametro stage: vacio, un stage o todos los stages
             steps {
                 script {
                 		env.ETAPA = 'Validacion'
@@ -28,17 +28,27 @@ def call(){
 							error 'Parametros invalidos, ejecución interrumpida: Cantidad de Steps'
 
       					}
-						//caso Gradle 
-						if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
-							println "INFO: Etapas validas -> OK!"		
-						}
-						else {
-							error 'Parametros invalidos, ejecución interrumpida: Steps no reconocidos'
-						}
-
-						// caso Maven
-
-
+      					if params.tool == 'gradle' {
+							//caso Gradle 
+							if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
+								println "INFO: Etapas validas -> OK!"		
+							}
+							else {
+								error 'Parametros invalidos: Gradle, ejecución interrumpida: Steps no reconocidos'
+							}
+      					}
+						else if (params.tool == 'maven') {
+							// caso Maven -> Compile;Test-Code;Build;Sonar;Run;Test-App;Nexus
+							if (params.stage.contains('Compile') || params.stage.contains('Test-Code') || params.stage.contains('Build') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test-App') || params.stage.contains('Nexus')) {
+								println "INFO: Etapas validas -> OK!"		
+							}
+							else {
+								error 'Parametros invalidos: Maven, ejecución interrumpida: Steps no reconocidos'
+							}      					
+      					}
+      					else {
+      						error "ERROR: parametro <Herramienta> incorrecto"
+      					}
                 }
             }
     	}
@@ -59,10 +69,11 @@ def call(){
 								//ejecucion.call()
 								gradle.call()
 						}
-						else {
-								//def ejecucion = load 'maven.groovy'
-								//ejecucion.call()
+						else if (params.tool == 'maven') {
 								maven.call()
+						}
+						else {
+							error "ERROR: parametro <Herramienta> incorrecto"
 						}
 					}
 					else {
@@ -71,8 +82,11 @@ def call(){
 						if (params.tool == 'gradle') { 
 								gradle.call()
 						}
-						else {
+						else if (params.tool == 'maven') {
 								maven.call()
+						}
+						else {
+							error "ERROR: parametro <Herramienta> incorrecto"
 						}
 					}
 				}
@@ -97,3 +111,12 @@ def call(){
 }
 
 return this;
+
+
+if ( ... ) {
+    ...
+} else if (...) {
+    ...
+} else {
+    ...
+}
