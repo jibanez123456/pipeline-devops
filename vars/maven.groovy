@@ -22,7 +22,7 @@ def call(){
 	stage('Test-Code') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('Test-Code') || env.PARAM_STAGE.isEmpty()) {
 			sh 'mvn clean test -e'
 		}
 		else {
@@ -75,7 +75,7 @@ def call(){
 	stage('Test-App') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('Test-App') || env.PARAM_STAGE.isEmpty()) {
 			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
 		}
 		else {

@@ -6,7 +6,7 @@
 
 def call(){
   
-	stage('Build-Test') {
+	stage('Build-Tst') {
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
 		if (env.PARAM_STAGE.contains('Build-Test') || env.PARAM_STAGE.isEmpty()) {
