@@ -33,7 +33,7 @@ def call(){
 
 	      					}
 
-	      					if params.tool == 'gradle' {
+	      					if (params.tool == 'gradle') {
 								//caso Gradle 
 								if (params.stage.contains('Build-Test') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
 									println "INFO: Etapas validas -> OK!"		
