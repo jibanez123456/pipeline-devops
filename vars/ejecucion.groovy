@@ -117,12 +117,3 @@ def call(){
 }
 
 return this;
-
-
-if ( ... ) {
-    ...
-} else if (...) {
-    ...
-} else {
-    ...
-}
