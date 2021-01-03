@@ -9,7 +9,7 @@ def call(){
 	stage('Build-Test') {
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Build-Test')) {
+		if (env.PARAM_STAGE.contains('Build-Test') || env.PARAM_STAGE.isEmpty()) {
 			sh 'gradle clean build'
 		}
 		else {
@@ -20,7 +20,7 @@ def call(){
 	stage('Sonar') {
 		// configurado en sonarcube-configuration
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Sonar')) {
+		if (env.PARAM_STAGE.contains('Sonar') || env.PARAM_STAGE.isEmpty()) {
 			def scannerHome = tool 'sonar-scanner';
 			
 			// conf generales
@@ -36,7 +36,7 @@ def call(){
 	stage('Run') {
 		// bat "gradle bootRun &"
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Run')) {
+		if (env.PARAM_STAGE.contains('Run') || env.PARAM_STAGE.isEmpty()) {
 			sh 'gradle bootRun &'
 			sleep 20
 		}
@@ -47,7 +47,7 @@ def call(){
 	stage('Test') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test')) {
+		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
 			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
 		}
 		else {
@@ -58,7 +58,7 @@ def call(){
 	stage('Nexus') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Nexus')) {
+		if (env.PARAM_STAGE.contains('Nexus') || env.PARAM_STAGE.isEmpty()) {
 		   nexusPublisher nexusInstanceId: 'nexus', 
 		   nexusRepositoryId: 'test-repo',
 		   packages: [

@@ -10,7 +10,7 @@ def call(){
 	stage('Compile') {
 		// 
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Compile')) {
+		if (env.PARAM_STAGE.contains('Compile') || env.PARAM_STAGE.isEmpty()) {
 			sh 'mvn clean compile -e'		
 		}
 		else {
@@ -22,7 +22,7 @@ def call(){
 	stage('Test-Code') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test')) {
+		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
 			sh 'mvn clean test -e'
 		}
 		else {
@@ -34,7 +34,7 @@ def call(){
 	stage('Build') {
 		// 
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Build')) {
+		if (env.PARAM_STAGE.contains('Build') || env.PARAM_STAGE.isEmpty()) {
 			sh 'mvn clean package -e'
 		}
 		else {
@@ -44,7 +44,7 @@ def call(){
 	}
 	stage('Sonar') {
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Sonar')) {
+		if (env.PARAM_STAGE.contains('Sonar') || env.PARAM_STAGE.isEmpty()) {
 		// configurado en sonarcube-configuration
 			def scannerHome = tool 'sonar-scanner';
 			
@@ -62,7 +62,7 @@ def call(){
 	stage('Run') {
 		// 
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Run')) {
+		if (env.PARAM_STAGE.contains('Run') || env.PARAM_STAGE.isEmpty()) {
 			sh 'mvn spring-boot:run &'
 			sleep 20
 		}
@@ -75,7 +75,7 @@ def call(){
 	stage('Test-App') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test')) {
+		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
 			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
 		}
 		else {
@@ -87,7 +87,7 @@ def call(){
 	stage('Nexus') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Nexus')) {
+		if (env.PARAM_STAGE.contains('Nexus') || env.PARAM_STAGE.isEmpty()) {
 
 			nexusPublisher nexusInstanceId: 'Nexus', 
 			nexusRepositoryId: 'test-repo',
