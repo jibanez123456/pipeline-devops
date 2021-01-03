@@ -9,12 +9,12 @@ def call(){
 	stage('Build-Tst') {
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Build-Test') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('Build-Tst') || env.PARAM_STAGE.isEmpty()) {
 			sh 'gradle clean build'
 		}
 		else {
 			// sh 'gradle clean build'
-			println "no ejecutar stage Build-Test"
+			println "no ejecutar stage Build-Tst"
 		}
 	}
 	stage('Sonar') {
