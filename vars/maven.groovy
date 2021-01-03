@@ -89,7 +89,7 @@ def call(){
 		env.ETAPA = env.STAGE_NAME
 		if (env.PARAM_STAGE.contains('Nexus') || env.PARAM_STAGE.isEmpty()) {
 
-			nexusPublisher nexusInstanceId: 'Nexus', 
+			nexusPublisher nexusInstanceId: 'nexus', 
 			nexusRepositoryId: 'test-repo',
 			packages: [
 				   [$class: 'MavenPackage', mavenAssetList: [
