@@ -61,6 +61,7 @@ def call(){
         stage('Pipeline') {
             steps {
                 script {
+			bat 'set'
                 	env.ETAPA = ''
                 	env.PARAM_STAGE = params.stage
                 	
