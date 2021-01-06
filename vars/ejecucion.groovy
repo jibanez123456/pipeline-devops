@@ -62,7 +62,9 @@ def call(){
             steps {
                 script {
 			bat 'set'
-			figlet params.stage
+			
+			figlet params.tool
+			
                 	env.ETAPA = ''
                 	env.PARAM_STAGE = params.stage
                 	
