@@ -64,19 +64,22 @@ def call(){
                 script {
 
 					bat 'set'
-			
 					figlet params.tool
 			
                 	env.ETAPA = ''
                 	env.PARAM_STAGE = params.stage
-                	env.GIT_BRANCH
+                	def pipeline_type = ''
 					params.tool
 
 					if (params.tool == 'gradle') { 
 						if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
+							pipeline_type = 'Integracion Continua'
+							figlet pipeline_type
 							pipeline_ci.call()
 						}
-						else if (env.GIT_BRANCH.contains('release')){
+						else if (env.GIT_BRANCH.contains('release')) {
+							pipeline_type = 'Entrega Continua'
+							figlet pipeline_type
 							pipeline_cd.call()
 						}
 					}
