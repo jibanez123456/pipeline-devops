@@ -6,59 +6,45 @@
 
 def call(){
   
-	stage('Build-Tst') {
+  	// caso pilepile-cd -> ■ 'downloadNexus','runDownloadedJar','rest','nexusCD'
+	stage('downloadNexus') {
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Build-Tst') || env.PARAM_STAGE.isEmpty()) {
-			sh 'gradle clean build'
+		if (env.PARAM_STAGE.contains('downloadNexus') || env.PARAM_STAGE.isEmpty()) {
+			curl -o DevOpsUsach2020-0.0.1.jar http://localhost:8082/repository/test-repo/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar
 		}
 		else {
 			// sh 'gradle clean build'
-			println "no ejecutar stage Build-Tst"
+			println "no ejecutar stage downloadNexus"
 		}
 	}
-	stage('Sonar') {
+	stage('runDownloadedJar') {
 		// configurado en sonarcube-configuration
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Sonar') || env.PARAM_STAGE.isEmpty()) {
-			def scannerHome = tool 'sonar-scanner';
-			
-			// conf generales
-			withSonarQubeEnv('sonar-server') { 
-				//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-				bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-			}
-		}
-		else {
-			println "no ejecutar stage Sonar"
-		}
-	}
-	stage('Run') {
-		// bat "gradle bootRun &"
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Run') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('runDownloadedJar') || env.PARAM_STAGE.isEmpty()) {
 			sh 'gradle bootRun &'
 			sleep 20
 		}
 		else {
-			println "no ejecutar stage Run"
+			println "no ejecutar stage runDownloadedJar"
 		}
 	}
-	stage('Test') {
+
+	stage('rest') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('rest') || env.PARAM_STAGE.isEmpty()) {
 			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
 		}
 		else {
-			println "no ejecutar stage Test"
+			println "no ejecutar stage rest"
 		}
 
 	}
-	stage('Nexus') {
+	stage('nexusCD') {
 		//
 		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Nexus') || env.PARAM_STAGE.isEmpty()) {
+		if (env.PARAM_STAGE.contains('nexusCD') || env.PARAM_STAGE.isEmpty()) {
 		   nexusPublisher nexusInstanceId: 'nexus', 
 		   nexusRepositoryId: 'test-repo',
 		   packages: [
@@ -79,7 +65,7 @@ def call(){
 			]
 		}
 		else {
-			println "no ejecutar stage Nexus"
+			println "no ejecutar stage nexusCD"
 		}	
 	}
 }

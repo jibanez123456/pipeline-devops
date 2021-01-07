@@ -33,22 +33,22 @@ def call(){
 
 	      					}
 
-	      					if (params.tool == 'gradle') {
-								//caso Gradle ->   	// ■ 'buildAndTest','sonar','runJar','rest','nexusCI'
+							if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
+								// pipeline-ci: ■ 'buildAndTest','sonar','runJar','rest','nexusCI'
 								if (params.stage.contains('buildAndTest') || params.stage.contains('sonar') || params.stage.contains('runJar') || params.stage.contains('rest') || params.stage.contains('nexusCI')) {
-									println "INFO: Etapas validas -> OK!"		
+									println "INFO: pipeline-ci: Etapas validas -> OK!"		
 								}
 								else {
-									error 'Parametros invalidos: Gradle, ejecución interrumpida: Steps no reconocidos'
+									error 'Parametros invalidos: CI -> ejecución interrumpida: Steps no reconocidos'
 								}
       						}
-							else if (params.tool == 'maven') {
-								// caso Maven -> Compile;Test-Code;Build;Sonar;Run;Test-App;Nexus
-								if (params.stage.contains('Compile') || params.stage.contains('Test-Code') || params.stage.contains('Build') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test-App') || params.stage.contains('Nexus')) {
-									println "INFO: Etapas validas -> OK!"		
+							else if (env.GIT_BRANCH.contains('release')) {
+								// caso pilepile-cd -> ■ 'downloadNexus','runDownloadedJar','rest','nexusCD'
+								if (params.stage.contains('downloadNexus') || params.stage.contains('runDownloadedJar') || params.stage.contains('rest') || params.stage.contains('nexusCD')) {
+									println "INFO: pipeline-cd: Etapas validas -> OK!"		
 								}
 								else {
-									error 'Parametros invalidos: Maven, ejecución interrumpida: Steps no reconocidos'
+									error 'Parametros invalidos: CD -> ejecución interrumpida: Steps no reconocidos'
 								}      					
 	      					}
 	      					else {
