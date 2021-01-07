@@ -22,7 +22,7 @@ def call(){
 		env.ETAPA = env.STAGE_NAME
 		if (env.PARAM_STAGE.contains('runDownloadedJar') || env.PARAM_STAGE.isEmpty()) {
 			sh 'gradle bootRun &'
-			sleep 20
+			sleep 30
 		}
 		else {
 			println "no ejecutar stage runDownloadedJar"
