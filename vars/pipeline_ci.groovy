@@ -1,0 +1,88 @@
+/*
+	forma de invocación de método call:
+	def ejecucion = load 'script.groovy'
+	ejecucion.call()
+*/
+
+def call(){
+
+  	// ■ 'buildAndTest','sonar','runJar','rest','nexusCI'
+	stage('buildAndTest') {
+		// sh ".gladlew clean build"
+		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE.contains('Build-Tst') || env.PARAM_STAGE.isEmpty()) {
+			sh 'gradle clean build'
+		}
+		else {
+			// sh 'gradle clean build'
+			println "no ejecutar stage Build-Tst"
+		}
+	}
+	stage('sonar') {
+		// configurado en sonarcube-configuration
+		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE.contains('sonar') || env.PARAM_STAGE.isEmpty()) {
+			def scannerHome = tool 'sonar-scanner';
+			
+			// conf generales
+			withSonarQubeEnv('sonar-server') { 
+				//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+				bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+			}
+		}
+		else {
+			println "no ejecutar stage Sonar"
+		}
+	}
+	stage('runJar') {
+		// bat "gradle bootRun &"
+		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE.contains('runJar') || env.PARAM_STAGE.isEmpty()) {
+			sh 'gradle bootRun &'
+			sleep 20
+		}
+		else {
+			println "no ejecutar stage Run"
+		}
+	}
+	stage('rest') {
+		//
+		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE.contains('Test') || env.PARAM_STAGE.isEmpty()) {
+			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+		}
+		else {
+			println "no ejecutar stage Test"
+		}
+
+	}
+	stage('nexusCI') {
+		//
+		env.ETAPA = env.STAGE_NAME
+		if (env.PARAM_STAGE.contains('nexusCI') || env.PARAM_STAGE.isEmpty()) {
+		   nexusPublisher nexusInstanceId: 'nexus', 
+		   nexusRepositoryId: 'test-repo',
+		   packages: [
+			   [$class: 'MavenPackage', mavenAssetList: [
+				   [
+					   classifier: '', 
+					   extension: 'jar', 
+					   filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\emplo-gradle_feature-dir-inicial\\build\\libs\\DevOpsUsach2020-0.0.1.jar'
+					]
+				], 
+				mavenCoordinate: [
+					artifactId: 'DevOpsUsach2020', 
+					groupId: 'com.devopsusach2020', 
+					packaging: 'jar', 
+					version: '1.0.0'
+					]
+				]
+			]
+		}
+		else {
+			println "no ejecutar stage Nexus"
+		}	
+	}
+}
+
+return this; 

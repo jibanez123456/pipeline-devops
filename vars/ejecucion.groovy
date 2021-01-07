@@ -34,8 +34,8 @@ def call(){
 	      					}
 
 	      					if (params.tool == 'gradle') {
-								//caso Gradle 
-								if (params.stage.contains('Build-Tst') || params.stage.contains('Sonar') || params.stage.contains('Run') || params.stage.contains('Test') || params.stage.contains('Nexus')) {
+								//caso Gradle ->   	// ■ 'buildAndTest','sonar','runJar','rest','nexusCI'
+								if (params.stage.contains('buildAndTest') || params.stage.contains('sonar') || params.stage.contains('runJar') || params.stage.contains('rest') || params.stage.contains('nexusCI')) {
 									println "INFO: Etapas validas -> OK!"		
 								}
 								else {
@@ -54,6 +54,7 @@ def call(){
 	      					else {
 	      						error "ERROR: parametro <Herramienta> incorrecto"
 	      					}
+	      					println "INFO: Ejecución de 1 o + stages"
 						}
                 }
             }
@@ -61,44 +62,32 @@ def call(){
         stage('Pipeline') {
             steps {
                 script {
-			bat 'set'
+
+					bat 'set'
 			
-			figlet params.tool
+					figlet params.tool
 			
                 	env.ETAPA = ''
                 	env.PARAM_STAGE = params.stage
-                	
-                	if (params.stage.isEmpty()) {
-						// ejecutar todos los steps
-						println "INFO: Ejecución de TODOS los stages"
+                	env.GIT_BRANCH
+					params.tool
 
-						params.tool
-
-						if (params.tool == 'gradle') { 
-								//def ejecucion = load 'gradle.groovy'
-								//ejecucion.call()
-								gradle.call()
+					if (params.tool == 'gradle') { 
+						if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
+							pipeline_ci.call()
 						}
-						else if (params.tool == 'maven') {
-								maven.call()
+						else if (env.GIT_BRANCH.contains('release')){
+							pipeline_cd.call()
 						}
-						else {
-							error "ERROR: parametro <Herramienta> incorrecto"
-						}
+					}
+					else if (params.tool == 'maven') {
+						println "INFO: no implementado"
 					}
 					else {
-						// ejecutar el o los stages ingresados
-						println "INFO: Ejecución de uno o mas stages"
-						if (params.tool == 'gradle') { 
-								gradle.call()
-						}
-						else if (params.tool == 'maven') {
-								maven.call()
-						}
-						else {
-							error "ERROR: parametro <Herramienta> incorrecto"
-						}
+						error "ERROR: parametro <Herramienta> incorrecto"
 					}
+					
+
 				}
             }
         }
