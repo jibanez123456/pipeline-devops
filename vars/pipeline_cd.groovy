@@ -11,10 +11,9 @@ def call(){
 		// sh ".gladlew clean build"
 		env.ETAPA = env.STAGE_NAME
 		if (env.PARAM_STAGE.contains('downloadNexus') || env.PARAM_STAGE.isEmpty()) {
-			curl -o DevOpsUsach2020-0.0.1.jar http://localhost:8082/repository/test-repo/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar
+			sh 'curl -o DevOpsUsach2020-0.0.1.jar http://localhost:8082/repository/test-repo/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar'
 		}
 		else {
-			// sh 'gradle clean build'
 			println "no ejecutar stage downloadNexus"
 		}
 	}
