@@ -40,16 +40,16 @@ def getNameFlow(branch_name){
             return "Integracion Continua"
         break;
 
-        case (env.GIT_BRANCH.contains('release'))
+        case (env.GIT_BRANCH.contains('release')):
             return "Despliegue Continuo"  
         break;
 
-        case (env.GIT_BRANCH.contains('master') || env.GIT_BRANCH.contains('main'))
+        case (env.GIT_BRANCH.contains('master') || env.GIT_BRANCH.contains('main')):
             return "Error: No es posible ejecutar Integración Continua sobre master/main"  
         break;
 
         default:
-                    return "No se reconoce flujo"
+            return "No se reconoce flujo"
         break:
     }
 
