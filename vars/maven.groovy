@@ -13,6 +13,10 @@ def call(stage_param, branch_name){
 
     figlet flow_name
 
+    println "DEBUG: stage_param: " + stage_param
+
+    println "DBUG: branch_name" + branch_name
+
     //separamos los flujos CI/CD
 
     switch(flow_name.toLowerCase()) {
@@ -31,6 +35,9 @@ def call(stage_param, branch_name){
 def ciFlow(stage_param){
 
     def validator = new Validator()
+
+    println "DBUG: ciFlow..."
+
 
     if(validator.isValidStage('compile', stage_param)){
         stage('compile') {
