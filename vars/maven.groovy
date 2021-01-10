@@ -78,7 +78,7 @@ def ciFlow(stage_param){
             // conf generales
             withSonarQubeEnv('sonar-server') { 
                 //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-                bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${env.GIT_URL}-${branch_name}-${EXECUTOR_NUMBER} -Dsonar.java.binaries=build"
+                bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${env.GIT_URL.split("/").last}-${branch_name}-${EXECUTOR_NUMBER} -Dsonar.java.binaries=build"
             }
 
             /*
