@@ -1,118 +1,115 @@
- 
+import pipeline.utils.*
 /*
 	forma de invocación de método call:
 	def ejecucion = load 'script.groovy'
 	ejecucion.call()
 */
 
-def call(){
+def call(stage_param, branch_name){
+    
+    def validator = new Validator()
 
-	stage('Compile') {
-		// 
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Compile') || env.PARAM_STAGE.isEmpty()) {
-			sh 'mvn clean compile -e'		
-		}
-		else {
-			println "no ejecutar stage Compile"
-		}
-		// sh 'mvn clean compile -e'		
-	}
+    flow_name = validator.getNameFlow(branch_name)
 
-	stage('Test-Code') {
-		//
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test-Code') || env.PARAM_STAGE.isEmpty()) {
-			sh 'mvn clean test -e'
-		}
-		else {
-			println "no ejecutar stage Test"
-		}
-		// sh 'mvn clean test -e'
-	}
-  
-	stage('Build') {
-		// 
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Build') || env.PARAM_STAGE.isEmpty()) {
-			sh 'mvn clean package -e'
-		}
-		else {
-			println "no ejecutar stage Build"
-		}
-		// sh 'mvn clean package -e'
-	}
-	stage('Sonar') {
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Sonar') || env.PARAM_STAGE.isEmpty()) {
-		// configurado en sonarcube-configuration
-			def scannerHome = tool 'sonar-scanner';
-			
-			// conf generales
-			withSonarQubeEnv('sonar-server') { 
-				//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-				bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-			}
-		}
-		else {
-			println "no ejecutar stage Sonar"
-		}
+    figlet flow_name
 
-	}
-	stage('Run') {
-		// 
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Run') || env.PARAM_STAGE.isEmpty()) {
-			sh 'mvn spring-boot:run &'
-			sleep 20
-		}
-		else {
-			println "no ejecutar stage Run"
-		}
-		// sh 'mvn spring-boot:run &'
-		// sleep 20
-	}
-	stage('Test-App') {
-		//
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Test-App') || env.PARAM_STAGE.isEmpty()) {
-			sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
-		}
-		else {
-			println "no ejecutar stage Test"
-		}
-		// sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+    //separamos los flujos CI/CD
 
-	}
-	stage('Nexus') {
-		//
-		env.ETAPA = env.STAGE_NAME
-		if (env.PARAM_STAGE.contains('Nexus') || env.PARAM_STAGE.isEmpty()) {
+    switch(flow_name.toLowerCase()) {
+        case "integracion continua":
+            ciFlow(stage_param)
+        break;
+        case "despliegue continuo":
+            cdFlow(stage_param)
+        break;
+    }
 
-			nexusPublisher nexusInstanceId: 'nexus', 
-			nexusRepositoryId: 'test-repo',
-			packages: [
-				   [$class: 'MavenPackage', mavenAssetList: [
-					   [
-						   classifier: '', 
-						   extension: 'jar', 
-						   filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\ejemplo-gradle-library\\build\\DevOpsUsach2020-0.0.1.jar'
-						]
-					], 
-					mavenCoordinate: [
-						artifactId: 'DevOpsUsach2020', 
-						groupId: 'com.devopsusach2020', 
-						packaging: 'jar', 
-						version: '1.0.0'
-					]
-				]
-			]
-		}
-		else {
-			println "no ejecutar stage Nexus"
-		}
-	}
+    
+}
+
+// Flujo CI
+def ciFlow(stage_param){
+
+    def validator = new Validator()
+
+    if(validator.isValidStage('compile', stage_param)){
+        stage('compile') {
+            env.STAGE = STAGE_NAME
+            sh './mvnw clean compile -e'   
+
+        }
+    }
+
+    if(validator.isValidStage('test', stage_param)){
+        stage('test') {
+            env.STAGE = STAGE_NAME
+            sh './mvnw clean test -e'   
+
+        }
+    }
+
+    if(validator.isValidStage('jar', stage_param)){
+        stage('jar') {
+            env.STAGE = STAGE_NAME
+            sh './mvnw clean package -e'   
+
+        }
+    }
+
+    if(validator.isValidStage('sonar', stage_param)){
+        stage('sonar') {
+            env.STAGE = STAGE_NAME
+            withSonarQubeEnv(installationName: 'sonar_server') {
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+            }
+
+        }
+    }
+
+    if(validator.isValidStage('nexusCI', stage_param)){ 
+        stage('nexusCI') {
+            env.STAGE = STAGE_NAME
+            nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]] 
+
+        }
+    }
 
 }
 
-return this; 
+// Flujo CD
+def cdFlow(stage_param){
+
+    def validator = new Validator()
+
+    if(validator.isValidStage('downloadNexus', stage_param)){
+        stage('downloadNexus') {
+            env.STAGE = STAGE_NAME
+            sh "curl -X GET -u admin:procco2020 http://bf9c05ea07fd.ngrok.io/repository/taller-10-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar -O"
+
+        }
+    }
+
+    if(validator.isValidStage('runDownloadedNexus', stage_param)){
+        stage('runDownloadedNexus') {
+            env.STAGE = STAGE_NAME
+            sh 'nohup mvn spring-boot:run &'
+            
+        }
+    }
+
+    stage('rest') {
+        env.STAGE = STAGE_NAME
+        sleep 20
+        sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'" 
+
+    }
+
+    stage('nexusCD') {
+        env.STAGE = STAGE_NAME
+        nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]] 
+    
+    }
+
+}
+
+return this;
