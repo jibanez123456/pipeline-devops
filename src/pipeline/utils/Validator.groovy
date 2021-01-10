@@ -25,35 +25,18 @@ def isValidStage(String stage_pipeline, String stage_param) {
 def getNameFlow(branch_name){
 
     
-    /*if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
+    if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
         return "Integracion Continua"
     }
     else if (env.GIT_BRANCH.contains('release')) {
         return "Despliegue Continuo"       
     }
-    else {
-        return "No se reconoce flujo"
-    }*/
-
-    switch(value) {
-        case (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')):
-            return "Integracion Continua"
-        break;
-
-        case (env.GIT_BRANCH.contains('release')):
-            return "Despliegue Continuo"  
-        break;
-
-        case (env.GIT_BRANCH.contains('master') || env.GIT_BRANCH.contains('main')):
-            return "Error: No es posible ejecutar Integración Continua sobre master/main"  
-        break;
-
-        default:
-            return "No se reconoce flujo"
-        break
+    else if (env.GIT_BRANCH.contains('master') || env.GIT_BRANCH.contains('main')) {
+        return "Error: No es posible ejecutar Integración Continua sobre master/main"  
     }
-
-
+    else {
+        return "Error: No se reconoce flujo"
+    }
 
 }
 
