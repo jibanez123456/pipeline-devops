@@ -15,7 +15,7 @@ def call(stage_param, branch_name){
 
     println "DEBUG: stage_param: " + stage_param
 
-    println "DBUG: branch_name" + branch_name
+    println "DBUG: branch_name: " + branch_name
 
     //separamos los flujos CI/CD
 
