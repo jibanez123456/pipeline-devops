@@ -11,6 +11,8 @@ def call(stage_param, branch_name){
 
     flow_name = validator.getNameFlow(branch_name)
 
+    bat 'set'
+
     figlet flow_name
 
     println "DEBUG: stage_param: " + stage_param
@@ -66,9 +68,22 @@ def ciFlow(stage_param){
     if(validator.isValidStage('sonar', stage_param)){
         stage('sonar') {
             env.STAGE = STAGE_NAME
-            withSonarQubeEnv(installationName: 'sonar-server') {
+            /*withSonarQubeEnv(installationName: 'sonar-server') {
                 sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+            }*/
+            def scannerHome = tool 'sonar-scanner';
+            
+            // conf generales
+            withSonarQubeEnv('sonar-server') { 
+                //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+                bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${branch_name} -Dsonar.java.binaries=build"
             }
+
+            /*
+            - Cada ejecución debe tener el siguiente formato de nombre: 
+                - {nombreRepo}-{rama}-{numeroEjecucion} 
+                ejemplo: - ms-iclab-feature-estadomundial-10 
+            */
 
         }
     }
