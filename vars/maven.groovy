@@ -19,6 +19,8 @@ def call(stage_param, branch_name){
 
     println "DEBUG: branch_name: " + branch_name
 
+    println "DEBUB: env.GIT_URL: " + env.GIT_URL
+
     //separamos los flujos CI/CD
 
     switch(flow_name) {
@@ -76,7 +78,7 @@ def ciFlow(stage_param){
             // conf generales
             withSonarQubeEnv('sonar-server') { 
                 //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-                bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${branch_name} -Dsonar.java.binaries=build"
+                bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${env.GIT_URL}-${branch_name}-${EXECUTOR_NUMBER} -Dsonar.java.binaries=build"
             }
 
             /*
