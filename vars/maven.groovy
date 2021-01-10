@@ -16,10 +16,10 @@ def call(stage_param, branch_name){
     //separamos los flujos CI/CD
 
     switch(flow_name.toLowerCase()) {
-        case "Integracion continua":
+        case "Integracion Continua":
             ciFlow(stage_param)
         break;
-        case "Despliegue continuo":
+        case "Despliegue Continuo":
             cdFlow(stage_param)
         break;
     }
