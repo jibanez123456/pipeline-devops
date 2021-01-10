@@ -23,6 +23,7 @@ def isValidStage(String stage_pipeline, String stage_param) {
 }
 
 def getNameFlow(branch_name){
+    /*
     if(branch_name.matches("(.*)feature(.*)") || branch_name == "(.*)develop"){
         return "Integracion Continua"
     }else{
@@ -32,6 +33,17 @@ def getNameFlow(branch_name){
             return "No se reconoce flujo"
         }
     }
+    */
+    if (env.GIT_BRANCH.contains('feature') || env.GIT_BRANCH.contains('develop')) {
+        return "Integracion Continua"
+    }
+    else if (env.GIT_BRANCH.contains('release')) {
+        return "Despliegue Continuo"       
+    }
+    else {
+        return "No se reconoce flujo"
+    }
+
 }
 
 return this;
