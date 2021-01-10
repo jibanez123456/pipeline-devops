@@ -59,7 +59,7 @@ def ciFlow(stage_param){
     if(validator.isValidStage('sonar', stage_param)){
         stage('sonar') {
             env.STAGE = STAGE_NAME
-            withSonarQubeEnv(installationName: 'sonar_server') {
+            withSonarQubeEnv(installationName: 'sonar-server') {
                 sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
             }
 
@@ -69,7 +69,25 @@ def ciFlow(stage_param){
     if(validator.isValidStage('nexusCI', stage_param)){ 
         stage('nexusCI') {
             env.STAGE = STAGE_NAME
-            nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]] 
+            // nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]] 
+        nexusPublisher nexusInstanceId: 'nexus', 
+           nexusRepositoryId: 'test-repo',
+           packages: [
+               [$class: 'MavenPackage', mavenAssetList: [
+                   [
+                       classifier: '', 
+                       extension: 'jar', 
+                       filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\emplo-gradle_feature-dir-inicial\\build\\libs\\DevOpsUsach2020-0.0.1.jar'
+                    ]
+                ], 
+                mavenCoordinate: [
+                    artifactId: 'DevOpsUsach2020', 
+                    groupId: 'com.devopsusach2020', 
+                    packaging: 'jar', 
+                    version: '1.0.0'
+                    ]
+                ]
+            ]
 
         }
     }
@@ -84,7 +102,7 @@ def cdFlow(stage_param){
     if(validator.isValidStage('downloadNexus', stage_param)){
         stage('downloadNexus') {
             env.STAGE = STAGE_NAME
-            sh "curl -X GET -u admin:procco2020 http://bf9c05ea07fd.ngrok.io/repository/taller-10-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar -O"
+            sh 'curl -o DevOpsUsach2020-0.0.1.jar http://localhost:8082/repository/test-repo/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar'
 
         }
     }
@@ -93,20 +111,39 @@ def cdFlow(stage_param){
         stage('runDownloadedNexus') {
             env.STAGE = STAGE_NAME
             sh 'nohup mvn spring-boot:run &'
+            sleep 30
             
         }
     }
 
     stage('rest') {
         env.STAGE = STAGE_NAME
-        sleep 20
-        sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'" 
+        sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing' 
 
     }
 
     stage('nexusCD') {
         env.STAGE = STAGE_NAME
-        nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]] 
+        // nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]] 
+
+        nexusPublisher nexusInstanceId: 'nexus', 
+           nexusRepositoryId: 'test-repo',
+           packages: [
+               [$class: 'MavenPackage', mavenAssetList: [
+                   [
+                       classifier: '', 
+                       extension: 'jar', 
+                       filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\emplo-gradle_feature-dir-inicial\\build\\libs\\DevOpsUsach2020-0.0.1.jar'
+                    ]
+                ], 
+                mavenCoordinate: [
+                    artifactId: 'DevOpsUsach2020', 
+                    groupId: 'com.devopsusach2020', 
+                    packaging: 'jar', 
+                    version: '1.0.0'
+                    ]
+                ]
+            ]
     
     }
 

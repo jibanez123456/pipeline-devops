@@ -35,15 +35,14 @@ def call(){
 
         post {
 
-            success {
-                slackSend color: 'good', message: "[Pablo Rocco][${env.JOB_NAME}][${env.TOOL}] Ejecución Exitosa", teamDomain: 'devops-usach-2020', tokenCredentialId: 'slack_token'
-            }
+    	success {
+    		 slackSend message: '[Jose Ibanez] [' + env.JOB_NAME + '] [' + env.TOOl  + '] [Ejecucion exitosa] ', teamDomain: 'devops-usach-2020', tokenCredentialId: 'slacktoken'
+    	}
 
-            failure {
-                slackSend color: 'danger', message: "[Pablo Rocco][${env.JOB_NAME}][${env.TOOL}] Ejecución fallida en [${env.STAGE}]", teamDomain: 'devops-usach-2020', tokenCredentialId: 'slack_token'
-            }
-
-        }
+    	failure {
+    		 slackSend message: '[Jose Ibanez] [' + env.JOB_NAME + '] [' + env.TOOL  + '] [Ejecucion fallida en stage:' + env.STAGE + '] ', teamDomain: 'devops-usach-2020', tokenCredentialId: 'slacktoken'
+    	}
+    }
     }  
 
 }
