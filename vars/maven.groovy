@@ -15,11 +15,11 @@ def call(stage_param, branch_name){
 
     println "DEBUG: stage_param: " + stage_param
 
-    println "DBUG: branch_name: " + branch_name
+    println "DEBUG: branch_name: " + branch_name
 
     //separamos los flujos CI/CD
 
-    switch(flow_name.toLowerCase()) {
+    switch(flow_name) {
         case "Integracion Continua":
             ciFlow(stage_param)
         break;
@@ -36,7 +36,7 @@ def ciFlow(stage_param){
 
     def validator = new Validator()
 
-    println "DBUG: ciFlow..."
+    println "DEBUG: ciFlow..."
 
 
     if(validator.isValidStage('compile', stage_param)){
