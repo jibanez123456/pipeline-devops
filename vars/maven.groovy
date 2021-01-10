@@ -13,7 +13,7 @@ def call(stage_param, branch_name){
 
     bat 'set'
 
-    repo_name = env.GIT_URL.split("/").last
+    repo_name = env.GIT_URL.split("/").last().replaceAll('.git', '')
 
     figlet flow_name
 
