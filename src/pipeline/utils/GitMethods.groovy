@@ -24,7 +24,7 @@ def deleteBranch(String branch) {
 def createBranch(String origin, String newBranch) {
 
 	println "DEBUG: origin=" + origin
-	println "DEBUG: origin=" + newBranch 
+	println "DEBUG: newBranch=" + newBranch 
  
 	sh 'git pull'
 	sh 'git checkout ${origin}'
