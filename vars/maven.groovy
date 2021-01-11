@@ -28,6 +28,7 @@ def call(stage_param, branch_name){
     println "DEBUG env.RELEASE_VERSION " +  env.RELEASE_VERSION 
 
 
+
     //separamos los flujos CI/CD
 
     switch(flow_name) {
@@ -48,6 +49,13 @@ def ciFlow(stage_param){
     def validator = new Validator()
 
     println "DEBUG: ciFlow..."
+
+    if (validator.isValidReleaseVersion(env.RELEASE_VERSION)) {
+            println "DEBUG: Valid version=" + env.RELEASE_VERSION
+    }
+    else {
+        error "ERROR: version invalida" + env.RELEASE_VERSION
+    }
 
 
     if(validator.isValidStage('compile', stage_param)){
@@ -110,7 +118,6 @@ def ciFlow(stage_param){
         }
     }
 
-    // def gitCreateRelease(String release) 
     if(validator.isValidStage('gitCreateRelease', stage_param) && env.GIT_BRANCH.contains('develop')){
         stage('gitCreateRelease') {
             env.STAGE = STAGE_NAME

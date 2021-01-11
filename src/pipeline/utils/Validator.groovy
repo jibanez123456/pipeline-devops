@@ -42,6 +42,13 @@ def getNameFlow(branch_name){
 
 def isValidReleaseVersion(String version) {
 
+    if (version =~ '\\d+\\-\\d+\\-\\d+') {
+        return true
+    }
+    else {
+        return false
+    }
+}
 
 }
 
