@@ -29,7 +29,7 @@ def createBranch(String origin, String newBranch) {
 	sh 'git pull'
 	sh 'git checkout ' + origin
 	sh 'git checkout -b ' + newBranch
-	sh 'git push origin ' ´+ newBranch
+	sh 'git push origin ' + newBranch
 }
 
 
