@@ -114,7 +114,7 @@ def ciFlow(stage_param){
             env.STAGE = STAGE_NAME
             def git = new GitMethods()
 
-            version = "1-1-1"
+            version = "1-1-2"
 
             if (git.checkIfBranchExists('release-v' + version)) {
                 println "INFO: La rama existe"
