@@ -25,6 +25,8 @@ def call(stage_param, branch_name){
 
     println "DEBUG: repo_name: " + repo_name
 
+    println "DEBUG env.RELEASE_VERSION " +  env.RELEASE_VERSION 
+
 
     //separamos los flujos CI/CD
 
@@ -114,17 +116,17 @@ def ciFlow(stage_param){
             env.STAGE = STAGE_NAME
             def git = new GitMethods()
 
-            version = "1-1-2"
+           // version = "1-1-2"
 
-            if (git.checkIfBranchExists('release-v' + version)) {
+            if (git.checkIfBranchExists('release-v' + env.RELEASE_VERSION)) {
                 println "INFO: La rama existe"
-                git.deleteBranch('release-v' + version) 
+                git.deleteBranch('release-v' + env.RELEASE_VERSION) 
                 println "INFO: Rala eliminada"
-                git.createBranch(env.GIT_BRANCH, 'release-v' + version)
+                git.createBranch(env.GIT_BRANCH, 'release-v' + env.RELEASE_VERSION)
                 println "INFO: Rama creada satisfactoriamente"
             }
             else {
-                git.createBranch(env.GIT_BRANCH, 'release-v' + version)
+                git.createBranch(env.GIT_BRANCH, 'release-v' + env.RELEASE_VERSION)
                 println "INFO: Rama creada satisfactoriamente"
             }
         }

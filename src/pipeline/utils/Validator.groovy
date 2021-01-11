@@ -40,6 +40,11 @@ def getNameFlow(branch_name){
 
 }
 
+def isValidReleaseVersion(String version) {
+
+
+}
+
 return this;
 
 

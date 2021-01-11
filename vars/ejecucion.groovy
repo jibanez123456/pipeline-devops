@@ -12,6 +12,7 @@ def call(){
         parameters { 
             choice(name: 'TOOL', choices: ['maven'], description: 'Selecciona herramienta') 
             string(name: 'stage', defaultValue: '', description: 'Selecciona stage a ejecutar')
+            string(name: 'releaseVersion', defaultValue: '', description: 'Ingresar version formato: {major}-{minor}-{patch}, ejemplo: 0-0-0')
         }
         
         stages {
@@ -21,6 +22,8 @@ def call(){
                         figlet params.TOOL
 
                         env.STAGE
+
+                        env.RELEASE_VERSION = params.releaseVersion
 
                         if (params.TOOL == 'gradle'){
                             gradle.call(params.stage, env.GIT_BRANCH)
