@@ -56,8 +56,8 @@ def ciFlow(stage_param){
         }
     }
 
-    if(validator.isValidStage('test', stage_param)){
-        stage('test') {
+    if(validator.isValidStage('unitTest', stage_param)){
+        stage('unitTest') {
             env.STAGE = STAGE_NAME
             sh './mvnw clean test -e'   
 
@@ -75,51 +75,64 @@ def ciFlow(stage_param){
     if(validator.isValidStage('sonar', stage_param)){
         stage('sonar') {
             env.STAGE = STAGE_NAME
-            /*withSonarQubeEnv(installationName: 'sonar-server') {
-                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-            }*/
             def scannerHome = tool 'sonar-scanner';
-            
-            // conf generales
             withSonarQubeEnv('sonar-server') { 
                 //sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
                 bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=${repo_name}-${branch_name}-${BUILD_NUMBER}-${EXECUTOR_NUMBER} -Dsonar.java.binaries=build"
             }
-
-            /*
-            - Cada ejecución debe tener el siguiente formato de nombre: 
-                - {nombreRepo}-{rama}-{numeroEjecucion} 
-                ejemplo: - ms-iclab-feature-estadomundial-10 
-            */
-
         }
     }
 
-    if(validator.isValidStage('nexusCI', stage_param)){ 
-        stage('nexusCI') {
+    if(validator.isValidStage('nexusUpload', stage_param)){ 
+        stage('nexusUpload') {
             env.STAGE = STAGE_NAME
-            // nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'taller-10-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: '/Users/procco/personal/usach/Modulo3/repositorios/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]] 
-        nexusPublisher nexusInstanceId: 'nexus', 
-           nexusRepositoryId: 'test-repo',
-           packages: [
-               [$class: 'MavenPackage', mavenAssetList: [
-                   [
-                       classifier: '', 
-                       extension: 'jar', 
-                       filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\emplo-gradle_feature-dir-inicial\\build\\libs\\DevOpsUsach2020-0.0.1.jar'
-                    ]
-                ], 
-                mavenCoordinate: [
-                    artifactId: 'DevOpsUsach2020', 
-                    groupId: 'com.devopsusach2020', 
-                    packaging: 'jar', 
-                    version: '1.0.0'
+            nexusPublisher nexusInstanceId: 'nexus', 
+               nexusRepositoryId: 'test-repo',
+               packages: [
+                   [$class: 'MavenPackage', mavenAssetList: [
+                       [
+                           classifier: '', 
+                           extension: 'jar', 
+                           filePath: 'C:\\Users\\jibanez\\.jenkins\\workspace\\emplo-gradle_feature-dir-inicial\\build\\libs\\DevOpsUsach2020-0.0.1.jar'
+                        ]
+                    ], 
+                    mavenCoordinate: [
+                        artifactId: 'DevOpsUsach2020', 
+                        groupId: 'com.devopsusach2020', 
+                        packaging: 'jar', 
+                        version: '1.0.0'
+                        ]
                     ]
                 ]
-            ]
 
         }
     }
+
+    // def gitCreateRelease(String release) 
+    if(validator.isValidStage('gitCreateRelease', stage_param) && env.GIT_BRANCH.contains('develop')){
+        stage('gitCreateRelease') {
+            env.STAGE = STAGE_NAME
+            def git = new GitMethods()
+
+            version = "1-1-1"
+
+            if (git.checkIfBranchExists('release-v' + version)) {
+                println "INFO: La rama existe"
+                git.deleteBranch('release-v' + version) 
+                println "INFO: Rala eliminada"
+                git.createBranch(env.GIT_BRANCH, 'release-v' + version)
+                println "INFO: Rama creada satisfactoriamente"
+            }
+            else {
+                git.createBranch(env.GIT_BRANCH, 'release-v' + version)
+                println "INFO: Rama creada satisfactoriamente"
+            }
+        }
+    }
+    
+}
+
+
 
 }
 
