@@ -50,8 +50,6 @@ def isValidReleaseVersion(String version) {
     }
 }
 
-}
-
 return this;
 
 
