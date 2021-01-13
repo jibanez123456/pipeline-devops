@@ -21,7 +21,7 @@ def call(stage_param, branch_name){
 
     figlet tecnologhy
 
-    mavenValid = validateTool()
+    mavenValid = validator.validateTool()
 
     if (mavenValid) {
         figlet env.TOOL + " Validada"
