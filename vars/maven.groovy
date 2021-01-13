@@ -142,7 +142,7 @@ def ciFlow(stage_param){
             if (git.checkIfBranchExists('release-v' + env.RELEASE_VERSION)) {
                 println "INFO: La rama existe"
                 git.deleteBranch('release-v' + env.RELEASE_VERSION) 
-                println "INFO: Rala eliminada"
+                println "INFO: Rama eliminada"
                 git.createBranch(env.GIT_BRANCH, 'release-v' + env.RELEASE_VERSION)
                 println "INFO: Rama creada satisfactoriamente"
             }

@@ -69,7 +69,7 @@ def technologyType(String nombreProyecto) {
 
 def validateTool() {
 
-    def fileTool = (env.TOOL == 'gradle') ? 'build.gradle' : 'pom.xml'
+    def fileTool = (env.TOOL == 'maven') ? 'pom.xml' : 'build.gradle'
 
     println "DEBUG: fileTool ->" + fileTool
 
