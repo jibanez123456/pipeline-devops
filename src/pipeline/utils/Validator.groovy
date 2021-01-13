@@ -71,7 +71,9 @@ def validateTool() {
 
     def fileTool = (env.TOOL == 'gradle') ? 'build.gradle' : 'pom.xml'
 
-    if (fileExists('fileTool')) {
+    println "DEBUG: fileTool ->" + fileTool
+
+    if (fileExists(fileTool)) {
         return true
     } 
     else {
