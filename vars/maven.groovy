@@ -17,6 +17,20 @@ def call(stage_param, branch_name){
 
     figlet flow_name
 
+    tecnologhy = validator.technologyType("ms-iclab")
+
+    figlet tecnologhy
+
+    mavenValid = validateTool()
+
+    if (mavenValid) {
+        figlet env.TOOL + " Validada"
+    }
+    else {
+        figlet env.TOOL + " NO Validada"
+    }
+
+
     println "DEBUG: stage_param: " + stage_param
 
     println "DEBUG: branch_name: " + branch_name

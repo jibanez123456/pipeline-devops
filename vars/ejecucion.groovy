@@ -25,8 +25,11 @@ def call(){
 
                         env.RELEASE_VERSION = params.releaseVersion
 
+                        env.TOOL = params.tool
+
                         if (params.TOOL == 'gradle'){
                             gradle.call(params.stage, env.GIT_BRANCH)
+
                         } else {
                             maven.call(params.stage, env.GIT_BRANCH)
                         }

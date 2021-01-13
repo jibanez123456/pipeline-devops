@@ -50,6 +50,38 @@ def isValidReleaseVersion(String version) {
     }
 }
 
+def technologyType(String nombreProyecto) {
+
+    if (nombreProyecto.ontains('ms') {
+        return "Tecnologia Microservicios"
+    }
+    else if (nombreProyecto.ontains('front') {
+        return "Tecnologia Frontend"
+    }
+    else if (nombreProyecto.ontains('bff') {
+        return "Tecnologia Backend for Fronend"
+    }
+    else {
+        return "Tecnologia No Reconocida"
+    }
+
+}
+
+def validateTool() {
+
+    def fileTool = (env.TOOL == 'gradle') ? 'build.gradle' : 'pom.xml'
+
+    if (fileExists('fileTool')) {
+        return true
+    } 
+    else {
+        return false
+    }
+}
+
+
+
+
 return this;
 
 
