@@ -28,13 +28,14 @@ def createBranch(String origin, String newBranch) {
 	println "DEBUG: origin=" + origin
 	println "DEBUG: newBranch=" + newBranch 
  
+ 	sh 'git branch -d ' + newBranch
+
 	sh 'git pull'
 	sh 'git checkout ' + origin
 	sh 'git checkout -b ' + newBranch
 	sh 'git push origin ' + newBranch
 	
 	sh 'git checkout ' + origin
-	sh 'git branch -d ' + newBranch
 }
 
 
