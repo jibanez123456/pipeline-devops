@@ -52,13 +52,13 @@ def isValidReleaseVersion(String version) {
 
 def technologyType(String nombreProyecto) {
 
-    if (nombreProyecto.contains('ms') {
+    if (nombreProyecto.contains('ms')) {
         return "Tecnologia Microservicios"
     }
-    else if (nombreProyecto.contains('front') {
+    else if (nombreProyecto.contains('front')) {
         return "Tecnologia Frontend"
     }
-    else if (nombreProyecto.contains('bff') {
+    else if (nombreProyecto.contains('bff')) {
         return "Tecnologia Backend for Fronend"
     }
     else {
