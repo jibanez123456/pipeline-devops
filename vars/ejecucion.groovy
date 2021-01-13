@@ -19,13 +19,14 @@ def call(){
             stage('Pipeline') {
                 steps {
                     script{
+                        
                         figlet params.TOOL
 
                         env.STAGE
 
                         env.RELEASE_VERSION = params.releaseVersion
 
-                        env.TOOL = params.tool
+                        env.TOOL = params.TOOL
 
                         if (params.TOOL == 'gradle'){
                             gradle.call(params.stage, env.GIT_BRANCH)
